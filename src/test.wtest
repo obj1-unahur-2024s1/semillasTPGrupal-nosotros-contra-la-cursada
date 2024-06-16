@@ -1,0 +1,68 @@
+import inta.*
+import parcelas.*
+import semillas.*
+
+	const menta1 = new Menta(anioObtencion = 2010, altura = 1)
+	const menta2 = new Menta(anioObtencion = 2010, altura = 0.3)
+	
+	const soja1 = new Soja(anioObtencion = 2007, altura = 0.6)
+	
+	const quinoa1 = new Quinoa(anioObtencion = 2010, altura = 1, horasDeSol = 12)
+	const quinoa2 = new Quinoa(anioObtencion = 2006, altura = 0.3, horasDeSol = 9)
+	
+	const soja2 = new Soja(anioObtencion = 2007, altura = 1)
+	const parcela1 = new ParcelaEcologica(ancho = 20, largo = 1, horasDeSolQueRecibe = 8, plantas = [soja2, soja2, soja2, soja2])
+	
+	const parcela2 = new ParcelaEcologica(ancho = 15, largo = 4, horasDeSolQueRecibe = 8, plantas = [soja2, menta1, menta2, soja2])
+	const parcela3 = new ParcelaEcologica(ancho = 10, largo = 3, horasDeSolQueRecibe = 8, plantas = [soja2, soja2, soja1, soja2, quinoa1, quinoa2])
+	const parcela4 = new ParcelaEcologica(ancho = 5, largo = 12, horasDeSolQueRecibe = 8, plantas = [soja1, menta1])
+	const parcela5 = new ParcelaEcologica(ancho = 23, largo = 12, horasDeSolQueRecibe = 8, plantas = [soja2, soja2, soja2, soja2, soja1, soja1, soja1, soja1])
+
+describe "Testeando las plantas"{
+	
+	test "Testeando la menta"{
+		assert.that(menta1.daSemillas())
+		assert.equals(3, menta1.espacioQueOcupa())
+		assert.notThat(menta2.daSemillas())
+		assert.equals(0.9, menta2.espacioQueOcupa())
+	}
+	
+	test "Testeando la soja"{
+		assert.equals(7, soja1.horasDeSol())
+		assert.notThat(soja1.daSemillas())
+		assert.equals(0.3, soja1.espacioQueOcupa())
+	}
+	
+	test "Testeando la quinoa"{
+		assert.that(quinoa1.daSemillas())
+		assert.notThat(quinoa2.daSemillas())
+	}
+	
+}
+
+describe "Testeando las parcelas"{
+	
+	test "Testeando la parcela"{
+		assert.equals(20, parcela1.superficie())
+		assert.equals(4, parcela1.cantidadMaximaPlantas())
+		assert.notThat(parcela1.tieneComplicaciones())
+	}
+	
+	test "Testeando superar el limite de plantas de la parcela"{
+		assert.throwsException({ parcela1.plantarPlanta(soja2) })
+}
+
+}
+
+describe "Testeando el INTA"{
+	
+	method initialize(){
+		inta.agregarParcelas([parcela1, parcela2, parcela3, parcela4, parcela5])
+	}
+	
+	test "Testeando promedio de plantas por parcela INTA"{
+		assert.equals(4.8, inta.promedioDePlantas())
+	}
+	
+}
+	
